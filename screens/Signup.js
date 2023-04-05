@@ -35,7 +35,7 @@ const Signup = () => {
           onPress={() => {
             navigation.navigate('login');
           }}
-          className="font-bold ml-1">
+          className="font-bold ml-1 text-[#00BCD4]">
           Log in
         </Text>
       </View>

@@ -27,6 +27,7 @@ const PhoneNumber = ({formData, setFormData, error, setError}) => {
           mode="outlined"
           className="bg-slate-100"
           onChangeText={handleChange}
+          keyboardType="number-pad"
         />
         <Text
           className={

@@ -7,6 +7,8 @@ import {
   Image,
   BackHandler,
   ScrollView,
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import React, {useEffect, useLayoutEffect, useState, useContext} from 'react';
 import {
@@ -61,6 +63,7 @@ const StepForm = () => {
   });
   const [termsChecked, setTermsChecked] = useState(false);
   const [drivingCheck, setDrivingCheck] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {fullName, email, password, postCode, user_address, phoneNumber} =
     formData;
@@ -142,8 +145,37 @@ const StepForm = () => {
   };
 
   const handleNext = () => {
-    setSelectScreen(selectScreen + 1);
-    setProgressValue(progressValue + 0.2);
+    // if(formData.email && selectScreen === 1){
+    //   const options = {
+    //     method: "POST",
+    //     url: "https://splasheroo-backend.herokuapp.com/api/checkEmail",
+    //     params: {},
+    //     headers: {
+    //       "content-type": "application/json",
+    //     },
+    //     data: {
+    //      email: formData.email
+    //     },
+    //   };
+      
+    //   axios
+    //     .request(options)
+    //     .then( (response) => {
+    //       console.log(response.data);
+    //       if(response.data.success){
+    //         Alert.alert('Email already exists');
+    //       } else {
+    //         setSelectScreen(selectScreen + 1);
+    //         setProgressValue(progressValue + 0.2);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // } else {
+      setSelectScreen(selectScreen + 1);
+      setProgressValue(progressValue + 0.2);
+    //}
   };
 
   const handlePrevios = () => {
@@ -172,6 +204,7 @@ const StepForm = () => {
   }, [formData, selectScreen]);
 
   const handleSubmit = () => {
+    setIsLoading(true);
     setSignupData(formData);
     const options = {
       method: 'POST',
@@ -200,12 +233,16 @@ const StepForm = () => {
           AsyncStorage.setItem('userToken', response.data.token);
           AsyncStorage.setItem('userId', response.data.account._id);
           AsyncStorage.setItem('userEmail', response.data.account.email);
+          setIsLoading(false);
           navigation.navigate('FindVehicle');
         } else {
           console.log('network Error');
+          setIsLoading(false);
         }
       })
       .catch(error => {
+        Alert.alert('Server not responding!');
+        setIsLoading(false);
         console.error(error);
       });
   };
@@ -262,6 +299,7 @@ const StepForm = () => {
                 </Button>
               </View>
             ) : (
+              isLoading ? <ActivityIndicator size="large" color="#0B646B" /> :
               <Button
                 className="bg-[#00BCD4]"
                 disabled={!(termsChecked && drivingCheck)}

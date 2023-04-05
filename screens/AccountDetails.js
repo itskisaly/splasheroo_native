@@ -148,7 +148,7 @@ const AccountDetails = () => {
                                 disabled
                                 value={fullName}
                                 mode="outlined"
-                                className="bg-slate-100"
+                                className="bg-slate-100 text-black"
                             />
                         </View>
                         <View className="px-3 mt-3">

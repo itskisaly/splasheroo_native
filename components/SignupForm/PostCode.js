@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity,ActivityIndicator} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {ProgressBar, MD3Colors, TextInput, Button} from 'react-native-paper';
 import {SelectList} from 'react-native-dropdown-select-list';
@@ -8,8 +8,10 @@ const PostCode = ({formData, setFormData}) => {
   // const [postCode, setPostCode] = useState("S11 0AZ");
   const [getAddress, setGetAddress] = useState([]);
   const {user_address} = formData;
+  const  [isLoading,setIsLoading] = useState(false);
 
   const handleSearch = async () => {
+    setIsLoading(true);
     const data = await axios.get(
       `https://api.getAddress.io/find/${formData.postCode}?api-key=lmNcjSdtG0W1tLhJc-s81g37988`,
     );
@@ -17,19 +19,9 @@ const PostCode = ({formData, setFormData}) => {
       return str.replace(/,/g, '');
     });
     setGetAddress(filteredArr);
+    setIsLoading(false);
     //setFormData({ ...formData, user_address:data.data.addresses.toString()})
   };
-
-  //LE22FW
-  // const data = [
-  //     { key: '1', value: 'Address 1' },
-  //     { key: '2', value: 'Address 2' },
-  //     { key: '3', value: 'Address 3' },
-  //     { key: '4', value: 'Address 4' },
-  //     { key: '5', value: 'Address 5' },
-  //     { key: '6', value: 'Address 6' },
-  //     { key: '7', value: 'Address 7' },
-  // ]
 
   const handleSelect = addr => {
     setFormData({...formData, user_address: addr});
@@ -61,20 +53,9 @@ const PostCode = ({formData, setFormData}) => {
             </TouchableOpacity>
           </View>
         </View>
+        {isLoading ? <ActivityIndicator size="large" color="#0B646B" /> :
         <View className="mt-5 w-full">
-          {/* <TextInput
-                    type="number"
-                    label=""
-                    disabled
-                    multiline
-                    value={getAddress.toString()}
-                    mode="outlined"
-                    className="bg-slate-100 h-90"
-                /> */}
           <SelectList
-            // setSelected={(address) => {
-            //     setFormData({...formData,address.toString()})
-            // }}
             boxStyles={{
               borderColor: '#000',
             }}
@@ -91,7 +72,7 @@ const PostCode = ({formData, setFormData}) => {
             data={getAddress}
             save="value"
           />
-        </View>
+        </View>}
       </View>
     </View>
   );

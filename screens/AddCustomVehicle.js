@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useState, useContext} from 'react';
+import React, { useEffect, useLayoutEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -8,21 +8,21 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {Banner} from '../assets';
+import { TextInput, Button } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { Banner } from '../assets';
 import CheckBox from '../components/CheckBox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import InputField from '../components/InputField';
 // import { Ionicons } from '@expo/vector-icons';
-import {AuthContext} from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
-import {back} from '../assets';
+import { back } from '../assets';
 
-const AddCustomVehicle = ({route}) => {
+const AddCustomVehicle = ({ route }) => {
   const data = route?.params?.param;
   const navigation = useNavigation();
-  const {userInfo, setRenderFetchData, renderFetchData} =
+  const { userInfo, setRenderFetchData, renderFetchData } =
     useContext(AuthContext);
   const [registrationPlate, setRegistrationPlate] = useState();
   const [currentUserId, setCurrentUserId] = useState();
@@ -36,6 +36,8 @@ const AddCustomVehicle = ({route}) => {
     const value = await AsyncStorage.getItem('userId');
     setCurrentUserId(value);
   };
+
+  console.log(data, 'data non000')
 
   const handleSubmit = () => {
     const options = {
@@ -67,8 +69,12 @@ const AddCustomVehicle = ({route}) => {
       .request(options)
       .then(response => {
         if (response) {
-          navigation.navigate('ChooseVehicleScreen');
-          setRenderFetchData(!renderFetchData);
+          if(data === "non-uk") {
+            navigation.navigate("verifyScreen");
+          } else {
+            navigation.navigate('ChooseVehicleScreen');
+            setRenderFetchData(!renderFetchData);
+          }
         }
       })
       .catch(error => {
@@ -128,9 +134,15 @@ const AddCustomVehicle = ({route}) => {
                 Add your vehicle
             </Text> */}
         <View className="flex-row px-4 items-center">
-          <Text onPress={() => navigation.navigate('ChooseVehicleScreen')}>
-            <Image source={back} />
-          </Text>
+          {data === "non-uk" ?
+            <Text onPress={() => navigation.navigate('FindVehicle')}>
+              <Image source={back} />
+            </Text> :
+            <Text onPress={() => navigation.navigate('ChooseVehicleScreen')}>
+              <Image source={back} />
+            </Text>
+          }
+
           <Text className="text-lg ml-20 text-center text-black">
             Add your custom vehicle
           </Text>
@@ -188,7 +200,7 @@ const AddCustomVehicle = ({route}) => {
           />
         </View>
         <View className="px-4 mt-10">
-          {data ? (
+          {data.model || data !== "non-uk" ? (
             <Button
               className="bg-[#00BCD4]"
               mode="contained"

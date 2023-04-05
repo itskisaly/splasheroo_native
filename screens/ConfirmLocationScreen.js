@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useContext, useState} from 'react';
+import React, {useLayoutEffect, useContext, useState, useEffect} from 'react';
 import {Button, TextInput} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import styles from './StyleScreen';
@@ -12,13 +12,15 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator
 } from 'react-native';
 //import { Ionicons } from 'react-native-vector-icons';
 import {AuthContext} from '../context/AuthContext';
 import axios from 'axios';
 import TextInputNative from '../components/TextInputNative';
 
-const ConfirmLocationScreen = () => {
+const ConfirmLocationScreen = ({route}) => {
+  const data = route?.params?.param;
   const {setBookingDetails, bookingDetails} = useContext(AuthContext);
   const navigation = useNavigation();
 
@@ -28,15 +30,6 @@ const ConfirmLocationScreen = () => {
   const [isSearching, setIsSearching] = useState(false);
 
   const hanldeConfirmLocation = () => {
-    console.log(
-      {
-        ...bookingDetails,
-        postCode: addPostCode,
-        location: landMark,
-        notes,
-      },
-      'note---',
-    );
     setBookingDetails({
       ...bookingDetails,
       postCode: addPostCode,
@@ -48,8 +41,10 @@ const ConfirmLocationScreen = () => {
 
   const [getAddress, setGetAddress] = useState([]);
   const [addPostCode, setAddPostCode] = useState('');
+  const [addressLoading,setAddressLoading] = useState(false);
 
   const handleSearch = async () => {
+    setAddressLoading(true);
     const data = await axios.get(
       `https://api.getAddress.io/find/${addPostCode}?api-key=lmNcjSdtG0W1tLhJc-s81g37988`,
     );
@@ -57,15 +52,24 @@ const ConfirmLocationScreen = () => {
       return str.replace(/,/g, '');
     });
     setGetAddress(filteredArr);
+    setAddressLoading(false);
   };
 
   const handleSelect = addr => {
     setLandMark(addr);
   };
 
+  useEffect(() => {
+    if(data){
+      setAddPostCode(data);
+    }
+  },[data])
+
   const handlePrevios = () => {
     navigation.navigate('homeScreen');
   };
+
+  console.log(bookingDetails,'bookingDetails')
 
   return (
     <>
@@ -102,6 +106,7 @@ const ConfirmLocationScreen = () => {
                       </TouchableOpacity>
                     </View>
                   </View>
+                  {addressLoading && <ActivityIndicator size="small" color="#0B646B"/>}
                   <View className="mt-5 w-full">
                     <SelectList
                       boxStyles={{

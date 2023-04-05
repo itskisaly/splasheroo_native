@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useState} from 'react';
-import {View, Text, SafeAreaView, Image, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, SafeAreaView, Image, TouchableOpacity, Alert,ActivityIndicator} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {Banner} from '../assets';
@@ -10,6 +10,7 @@ const FindVehicle = () => {
   const navigation = useNavigation();
   const [registrationPlate, setRegistrationPlate] = useState();
   const [licensed, setLicensed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -18,6 +19,10 @@ const FindVehicle = () => {
   }, []);
 
   const handleNavigation = () => {
+    setIsLoading(true);
+    if(licensed){
+      navigation.navigate('addCustomVehicle',{param: "non-uk"});
+    } else {
     const options = {
       method: 'POST',
       url: 'https://splasheroo-backend.herokuapp.com/api/vehicle/getUKVD',
@@ -37,13 +42,16 @@ const FindVehicle = () => {
           registrationPlate: registrationPlate,
           data: response.data,
         };
+        setIsLoading(false);
         navigation.navigate('AddVehicle', {param: _data});
         console.log(response.data);
       })
       .catch(error => {
-        Alert.alert('Please add the correct one!');
+        setIsLoading(false);
+        Alert.alert('Oops were unable to find your vehicle. Please add the details manually.');
         console.error(error);
       });
+    }
   };
 
   return (
@@ -64,22 +72,24 @@ const FindVehicle = () => {
           />
         </View>
         <View>
+          {isLoading ? <ActivityIndicator size="large" color="#0B646B" /> : 
           <Button
-            disabled={!registrationPlate}
-            className="bg-[#00BCD4] border-none py-1 px-1 h-100"
-            style={{
-              width: 110,
-            }}
-            mode="contained"
-            onPress={handleNavigation}>
-            <Text>Search</Text>
+          disabled={!registrationPlate}
+          className="bg-[#00BCD4] border-none py-1 px-1 h-100"
+          style={{
+            width: 110,
+          }}
+          mode="contained"
+          onPress={handleNavigation}>
+            <Text>{!licensed ? "Search" : "Add"}</Text>
           </Button>
+          }
         </View>
       </View>
       <View>
         <CheckBox
           onPress={() => setLicensed(!licensed)}
-          title="I have a non-UK licensed vehicle"
+          title="Manually add vehicle"
           isChecked={licensed}
         />
       </View>

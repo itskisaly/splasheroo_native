@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useState, useContext} from 'react';
+import React, { useEffect, useLayoutEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
+import { TextInput, Button, Modal, Portal, Provider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import {Banner} from '../assets';
-import {AuthContext} from '../context/AuthContext';
+import { Banner } from '../assets';
+import { AuthContext } from '../context/AuthContext';
 // import {
 //     AntDesign,
 //     AntDesign,
@@ -27,7 +27,14 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const {setUserInfo} = useContext(AuthContext);
+  const { setUserInfo } = useContext(AuthContext);
+  const [visible, setVisible] = React.useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetLoading,setResetLoading] = useState(false);
+
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = { backgroundColor: 'white', padding: 50 };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -83,6 +90,32 @@ const LoginScreen = () => {
       });
   };
 
+  const handleReset = () => {
+    setResetLoading(true);
+    const options = {
+      method: "POST",
+      url: "https://splasheroo-backend.herokuapp.com/api/email/reset",
+      params: {},
+      headers: {
+        "content-type": "application/json",
+      },
+      data: {
+        email: resetEmail,
+      },
+    };
+
+    axios
+      .request(options)
+      .then((response) => {
+        setResetLoading(false);
+        hideModal();
+        Alert.alert('Check your email to reset your password');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView className="bg-white h-full">
@@ -113,7 +146,7 @@ const LoginScreen = () => {
             onChangeText={text => setPassword(text)}
           />
         </View>
-        <Text className="text-right mt-3 px-4 text-[#055ED0]">
+        <Text onPress={showModal} className="text-right mt-3 px-4 text-[#055ED0]">
           Forget password?
         </Text>
         {userLoggedIn ? (
@@ -134,13 +167,38 @@ const LoginScreen = () => {
             <View className="mt-6 px-4 flex-row justify-center align-items-center relative top-10">
               <Text className="text-black">Don’t have an account?</Text>
               <Text
-                className="font-bold ml-1"
+                className="font-bold ml-1 text-[#00BCD4]"
                 onPress={() => navigation.navigate('Signup')}>
                 Sign up
               </Text>
             </View>
           </View>
         )}
+        <Portal>
+          <Modal style={{ padding: 20 }} visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+            <>
+              <Text>Enter you registered email</Text>
+              <TextInput
+                label="Email Address"
+                value={resetEmail}
+                mode="outlined"
+                style={{ marginTop: 10 }}
+                onChangeText={text => setResetEmail(text)}
+              />
+             {!resetLoading ? <Button
+                style={{ marginTop: 20, backgroundColor: "#00BCD4" }}
+                disabled={!resetEmail}
+                mode="contained"
+                onPress={handleReset}>
+                Submit
+              </Button> : 
+                <View style={{marginTop:10}}>
+                  <ActivityIndicator size="small" color="#0B646B" /> 
+                </View>
+              }
+            </>
+          </Modal>
+        </Portal>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

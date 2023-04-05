@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react';
+import {useState, useEffect, useContext,useRef} from 'react';
 
 import GetLocation from 'react-native-get-location';
 
@@ -12,7 +12,7 @@ import {
   BackHandler,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Button} from 'react-native-paper';
+import {Button,TextInput} from 'react-native-paper';
 
 import {AuthContext} from '../context/AuthContext';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
@@ -44,8 +44,12 @@ const HomeScreen = () => {
 
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [postCodes,setPostCodes] = useState();
 
   const [found, setFound] = useState(true);
+  const [dragStart,setDragStart] = useState(false);
+
+  const textRef = useRef()
 
   const loadData = async () => {
     setIsLoading(true);
@@ -71,13 +75,12 @@ const HomeScreen = () => {
       });
   };
 
-  useEffect(() => {
+  const getCurrentLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
     })
       .then(location => {
-        console.log(location);
         setPin({
           latitude: location.latitude,
           longitude: location.longitude,
@@ -87,6 +90,10 @@ const HomeScreen = () => {
         const {code, message} = error;
         console.warn(code, message);
       });
+   }
+
+  useEffect(() => {
+    getCurrentLocation();
   }, []);
 
   useEffect(() => {
@@ -111,14 +118,32 @@ const HomeScreen = () => {
       longitude: pin.longitude,
       address: userAddress,
     });
-    navigation.navigate('ConfirmLocationScreen');
+    navigation.navigate('ConfirmLocationScreen',{param: postCodes});
   };
+
+  const loadPostCode = async () => {
+    const data = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${pin.latitude}&lon=${pin.longitude}&apiKey=791e0dd5f41c47ef87b181780e60a239`);
+    textRef.current.setAddressText(data.data.features[0].properties.address_line2);
+    setPostCodes(data.data.features[0].properties.postcode);
+    setUserAddress(data.data.features[0].properties.address_line2);
+  }
+
+  useEffect(() => {
+    loadPostCode();
+  },[pin])
+  
+  const handleReset = () => {
+    getCurrentLocation();
+    textRef.current.clear();
+  }
+
 
   return (
     <>
       <GooglePlacesAutocomplete
         placeholder="Enter Location"
         fetchDetails={true}
+        ref={textRef}
         styles={{
           container: {
             flex: 0,
@@ -165,7 +190,7 @@ const HomeScreen = () => {
                 coordinate={pin}
                 draggable={true}
                 onDragStart={e => {
-                  console.log('Dragstart', e.nativeEvent.coordinate);
+                  //console.log('Dragstart', e.nativeEvent.coordinate);
                 }}
                 image={pin2}
                 onDragEnd={e => {
@@ -173,7 +198,6 @@ const HomeScreen = () => {
                     latitude: e.nativeEvent.coordinate.latitude,
                     longitude: e.nativeEvent.coordinate.longitude,
                   });
-                  console.log(pin);
                 }}>
                 <Callout>
                   <Text>Your Vehicle!</Text>
@@ -215,33 +239,18 @@ const HomeScreen = () => {
               alignSelf: 'center',
             }}></View>
           <View>
-            {upcomingBooking ? (
-              <>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginLeft: 20,
-                    color: '#000',
-                  }}>
-                  UPCOMING
-                </Text>
-                <BookingCards
-                  upcomingBooking={upcomingBooking}
-                  image={Mercedes}
-                />
-              </>
-            ) : null}
-          </View>
-          <View>
+            <View className="flex-row justify-between">
             <Text
               style={{
                 marginHorizontal: 20,
-                fontSize: 16,
+                fontSize: 18,
                 marginTop: 10,
                 color: '#000',
               }}>
               Where's your Vehicle?
             </Text>
+              <Button className="mr-4" onPress={() => handleReset()}>Reset</Button>
+            </View>
             <Text style={{padding: 20, color: '#000'}}>
               Hold and Move the pin to highlight the correct location of your
               car - it really helps!
@@ -258,6 +267,25 @@ const HomeScreen = () => {
               mode="contained">
               Submit
             </Button>
+          </View>
+          <View>
+            {upcomingBooking ? (
+              <>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    marginLeft: 20,
+                    color: '#000',
+                    marginTop:20
+                  }}>
+                  UPCOMING
+                </Text>
+                <BookingCards
+                  upcomingBooking={upcomingBooking}
+                  image={Mercedes}
+                />
+              </>
+            ) : null}
           </View>
         </View>
       </ScrollView>
