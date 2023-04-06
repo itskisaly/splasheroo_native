@@ -56,14 +56,6 @@ const AddCustomVehicle = ({ route }) => {
         coulor: colour,
       },
     };
-    console.log({
-      id: currentUserId,
-      RegistrationPlate: registrationPlate,
-      licence: true,
-      model,
-      make,
-      coulor: colour,
-    });
 
     axios
       .request(options)
@@ -200,7 +192,7 @@ const AddCustomVehicle = ({ route }) => {
           />
         </View>
         <View className="px-4 mt-10">
-          {data.model || data !== "non-uk" ? (
+          {data !== "non-uk" && data !== "addBooking" ? (
             <Button
               className="bg-[#00BCD4]"
               mode="contained"

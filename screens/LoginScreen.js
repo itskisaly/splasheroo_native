@@ -43,8 +43,8 @@ const LoginScreen = () => {
   }, []);
 
   const getData = async () => {
-    const value = await AsyncStorage.getItem('userToken');
-    if (value !== null) {
+    const value = await AsyncStorage.getItem('completeProfile');
+    if (value === "completed") {
       navigation.navigate('homeScreen');
     }
   };
@@ -79,6 +79,7 @@ const LoginScreen = () => {
         AsyncStorage.setItem('userEmail', response.data.account.email);
 
         if (response.data.account.completedProfile) {
+          AsyncStorage.setItem('completeProfile', "completed");
           navigation.navigate('homeScreen');
         } else {
           Alert.alert('Please verify your account');

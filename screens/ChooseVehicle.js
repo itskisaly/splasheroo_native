@@ -144,10 +144,7 @@ function ChooseVehicleScreen() {
           <View className="mt-5">
             <Text
               onPress={() => {
-                const data = {
-                  route: 'addBooking',
-                };
-                navigation.navigate('addCustomVehicle');
+                navigation.navigate('addCustomVehicle',{param: "addBooking"});
               }}
               style={{textAlign: 'center', color: '#055ED0'}}>
               + Add Vehicle
