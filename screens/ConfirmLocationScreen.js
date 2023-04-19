@@ -1,8 +1,9 @@
-import React, {useLayoutEffect, useContext, useState, useEffect} from 'react';
-import {Button, TextInput} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import React, { useLayoutEffect, useContext, useState, useEffect } from 'react';
+import { Button, TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import styles from './StyleScreen';
-import {SelectList} from 'react-native-dropdown-select-list';
+import { SelectList } from 'react-native-dropdown-select-list';
+import CheckBox from '../components/CheckBox';
 import {
   StyleSheet,
   View,
@@ -15,19 +16,20 @@ import {
   ActivityIndicator
 } from 'react-native';
 //import { Ionicons } from 'react-native-vector-icons';
-import {AuthContext} from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import TextInputNative from '../components/TextInputNative';
 
-const ConfirmLocationScreen = ({route}) => {
+const ConfirmLocationScreen = ({ route }) => {
   const data = route?.params?.param;
-  const {setBookingDetails, bookingDetails} = useContext(AuthContext);
+  const { setBookingDetails, bookingDetails } = useContext(AuthContext);
   const navigation = useNavigation();
 
   const [postCode, setPostCode] = useState('');
   const [landMark, setLandMark] = useState('');
   const [notes, setNotes] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [manually, setMaually] = useState(false);
 
   const hanldeConfirmLocation = () => {
     setBookingDetails({
@@ -41,7 +43,7 @@ const ConfirmLocationScreen = ({route}) => {
 
   const [getAddress, setGetAddress] = useState([]);
   const [addPostCode, setAddPostCode] = useState('');
-  const [addressLoading,setAddressLoading] = useState(false);
+  const [addressLoading, setAddressLoading] = useState(false);
 
   const handleSearch = async () => {
     setAddressLoading(true);
@@ -60,22 +62,21 @@ const ConfirmLocationScreen = ({route}) => {
   };
 
   useEffect(() => {
-    if(data){
+    if (data) {
       setAddPostCode(data);
     }
-  },[data])
+  }, [data])
 
   const handlePrevios = () => {
     navigation.navigate('homeScreen');
   };
 
-  console.log(bookingDetails,'bookingDetails')
 
   return (
     <>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <SafeAreaView className="h-full w-full bg-white">
           <ScrollView>
+        <SafeAreaView className="h-full w-full bg-white">
             <View className="px-4">
               <Text style={styles.text}>
                 Please let us know your exact address so we can collect the key!
@@ -106,7 +107,7 @@ const ConfirmLocationScreen = ({route}) => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  {addressLoading && <ActivityIndicator size="small" color="#0B646B"/>}
+                  {addressLoading && <ActivityIndicator size="small" color="#0B646B" />}
                   <View className="mt-5 w-full">
                     <SelectList
                       boxStyles={{
@@ -128,15 +129,28 @@ const ConfirmLocationScreen = ({route}) => {
                   </View>
                 </View>
               </View>
-
+              <View>
+                <CheckBox
+                  onPress={() => setMaually(!manually)}
+                  title="Enter Address Manually"
+                  isChecked={manually}
+                />
+              </View>
+                {manually &&
+              <View className="px-4">
+                  <TextInput
+                    mode="outlined"
+                    label="address"
+                    textColor="#000"
+                    className="bg-slate-100"
+                    value={landMark}
+                    placeholder="Enter Post Code"
+                    onChangeText={text => setLandMark(text)}
+                  />
+              </View>
+                }
               <View>
                 <Text style={styles.subhead}>Notes</Text>
-                {/* <TextInput
-              className="bg-slate-100"
-              style={{ height: 300, margin: 20,textAlignVertical: "top" }}
-              placeholder="Any extra information that will help us find your car easily"
-              onChangeText={(text) => setNotes(text)}
-            /> */}
                 <TextInputNative setNotes={setNotes} />
               </View>
               <View>
@@ -151,8 +165,8 @@ const ConfirmLocationScreen = ({route}) => {
                 </Button>
               </View>
             </View>
-          </ScrollView>
         </SafeAreaView>
+          </ScrollView>
       </TouchableWithoutFeedback>
     </>
   );

@@ -49,6 +49,8 @@ import VerifyScreen from '../screens/VerifyScreen';
 import AddCustomVehicle from '../screens/AddCustomVehicle';
 import ConfirmLocationScreen from '../screens/ConfirmLocationScreen';
 import ChooseVehicleScreen from '../screens/ChooseVehicle';
+import RegisterAddVehicle from "../screens/RegisterAddVehicle";
+import RegisterFindVehicle from '../screens/RegisterFindVehicle';
 
 import AddVehicle from '../screens/AddVehicle';
 
@@ -120,6 +122,20 @@ const FirstScreenStack = () => {
       <Stack.Screen
         name="AddVehicle"
         component={AddVehicle}
+        options={{
+          headerShown: false,
+        }}
+      />
+        <Stack.Screen
+        name="RegisterAddVehicle"
+        component={RegisterAddVehicle}
+        options={{
+          headerShown: false,
+        }}
+      />
+        <Stack.Screen
+        name="RegisterFindVehicle"
+        component={RegisterFindVehicle}
         options={{
           headerShown: false,
         }}

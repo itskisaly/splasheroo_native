@@ -37,7 +37,7 @@ const AddCustomVehicle = ({ route }) => {
     setCurrentUserId(value);
   };
 
-  console.log(data, 'data non000')
+  console.log(data, '2121212')
 
   const handleSubmit = () => {
     const options = {
@@ -60,11 +60,14 @@ const AddCustomVehicle = ({ route }) => {
     axios
       .request(options)
       .then(response => {
+        console.log(data,'kislay in console')
         if (response) {
-          if(data === "non-uk") {
-            navigation.navigate("verifyScreen");
-          } else {
-            navigation.navigate('ChooseVehicleScreen');
+          if(data.uk === "non-uk" && data.route === "homeVehicle") {
+            navigation.navigate("Vehicles");
+            setRenderFetchData(!renderFetchData);
+          } 
+          else if(data.route === "regVehicle" && data.uk === "non-uk"){
+            navigation.navigate("ChooseVehicleScreen");
             setRenderFetchData(!renderFetchData);
           }
         }
@@ -126,17 +129,17 @@ const AddCustomVehicle = ({ route }) => {
                 Add your vehicle
             </Text> */}
         <View className="flex-row px-4 items-center">
-          {data === "non-uk" ?
+          {/* {data.route === "non-uk" ?
             <Text onPress={() => navigation.navigate('FindVehicle')}>
               <Image source={back} />
             </Text> :
             <Text onPress={() => navigation.navigate('ChooseVehicleScreen')}>
               <Image source={back} />
             </Text>
-          }
+          } */}
 
           <Text className="text-lg ml-20 text-center text-black">
-            Add your custom vehicle
+            Add your custom vehicles
           </Text>
         </View>
         <View className="px-4">
@@ -192,7 +195,7 @@ const AddCustomVehicle = ({ route }) => {
           />
         </View>
         <View className="px-4 mt-10">
-          {data !== "non-uk" && data !== "addBooking" ? (
+          {data.uk !== "non-uk" && data !== "addBooking" ? (
             <Button
               className="bg-[#00BCD4]"
               mode="contained"

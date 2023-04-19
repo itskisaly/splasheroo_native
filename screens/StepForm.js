@@ -206,6 +206,7 @@ const StepForm = () => {
   const handleSubmit = () => {
     setIsLoading(true);
     setSignupData(formData);
+    console.log(formData,'formData')
     const options = {
       method: 'POST',
       url: 'https://splasheroo-backend.herokuapp.com/api/register',
@@ -234,7 +235,7 @@ const StepForm = () => {
           AsyncStorage.setItem('userId', response.data.account._id);
           AsyncStorage.setItem('userEmail', response.data.account.email);
           setIsLoading(false);
-          navigation.navigate('FindVehicle');
+          navigation.navigate('RegisterFindVehicle');
         } else {
           console.log('network Error');
           setIsLoading(false);

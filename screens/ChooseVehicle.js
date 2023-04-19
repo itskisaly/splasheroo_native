@@ -43,10 +43,11 @@ function ChooseVehicleScreen() {
   const [loading, setLoading] = useState(false);
   const [getVehicleData, setGetVehicleData] = useState();
 
+  console.log(bookingDetails,'bookingDetailskislay')
+
   const getData = async () => {
     setLoading(true);
     const value = await AsyncStorage.getItem('userId');
-    console.log(value, 'value0');
     const options = {
       method: 'POST',
       url: 'https://splasheroo-backend.herokuapp.com/api/vehicle/get',
@@ -110,7 +111,7 @@ function ChooseVehicleScreen() {
             <Image source={back} />
           </Text>
           <Text className="text-2xl mt-10 ml-20 text-center">
-            Choose vehicle
+            Choose vehicles
           </Text>
         </View>
         <ScrollView className="px-4">
@@ -144,7 +145,7 @@ function ChooseVehicleScreen() {
           <View className="mt-5">
             <Text
               onPress={() => {
-                navigation.navigate('addCustomVehicle',{param: "addBooking"});
+                navigation.navigate('FindVehicle',{param: "addBooking"});
               }}
               style={{textAlign: 'center', color: '#055ED0'}}>
               + Add Vehicle

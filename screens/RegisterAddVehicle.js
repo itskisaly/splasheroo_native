@@ -21,7 +21,7 @@ import {back} from '../assets';
 
 import axios from 'axios';
 
-const AddVehicle = ({route}) => {
+const RegisterAddVehicle = ({route}) => {
   const data = route?.params?.param;
   const navigation = useNavigation();
   const {userInfo,setRenderFetchData,renderFetchData} = useContext(AuthContext);
@@ -38,11 +38,15 @@ const AddVehicle = ({route}) => {
     });
   }, []);
 
+  console.log(data,'data00')
+
   useEffect(() => {
     setRegistrationPlate(data.registrationPlate);
-    setColour(data.data.vehicleDetails?.colour);
-    setMake(data.data.vehicleDetails?.make);
-    setModel(data.data.vehicleDetails?.model);
+    if(data.uk !== "non-uk"){
+            setColour(data.data.vehicleDetails?.colour);
+            setMake(data.data.vehicleDetails?.make);
+            setModel(data.data.vehicleDetails?.model);
+        }
   }, []);
 
   const handleSubmit = async () => {
@@ -56,7 +60,7 @@ const AddVehicle = ({route}) => {
       },
       data: {
         id: userInfo?.account?._id ? userInfo?.account?._id : value,
-        RegistrationPlate: data.registrationPlate,
+        RegistrationPlate: registrationPlate,
         licence: true,
         model,
         make,
@@ -67,14 +71,7 @@ const AddVehicle = ({route}) => {
       .request(options)
       .then(response => {
         if (response) {
-          console.log(response.data, 'responsessss');
-          if(data.route === "homeVehicle"){
-            navigation.navigate('Vehicles');  
-            setRenderFetchData(!renderFetchData);
-          }if(data.route === "regVehicle") {
-            navigation.navigate('ChooseVehicleScreen');  
-            setRenderFetchData(!renderFetchData);
-          }
+            navigation.navigate('verifyScreen');
         }
       })
       .catch(error => {
@@ -104,6 +101,7 @@ const AddVehicle = ({route}) => {
               text="Registration plate"
               value={registrationPlate}
               setValue={setRegistrationPlate}
+              onChangeText={text => setRegistrationPlate(text)}
             />
             <CheckBox
               onPress={() => setLicensed(!licensed)}
@@ -140,4 +138,4 @@ const AddVehicle = ({route}) => {
   );
 };
 
-export default AddVehicle;
+export default RegisterAddVehicle;

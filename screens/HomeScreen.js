@@ -10,6 +10,7 @@ import {
   View,
   ActivityIndicator,
   BackHandler,
+  Image
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button,TextInput} from 'react-native-paper';
@@ -18,10 +19,11 @@ import {AuthContext} from '../context/AuthContext';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, {Callout, Circle, Marker} from 'react-native-maps';
-import {mapPin, Mercedes} from '../assets';
+import {mapPin, Mercedes,reset,back} from '../assets';
 
 import pin2 from '../assets/pin2.png';
 import BookingCards from '../components/BookingCards';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 
 const HomeScreen = () => {
@@ -249,7 +251,9 @@ const HomeScreen = () => {
               }}>
               Where's your Vehicle?
             </Text>
-              <Button className="mr-4" onPress={() => handleReset()}>Reset</Button>
+              <Button className="mr-4" onPress={() => handleReset()}>
+               <Image source={reset} />
+              </Button>
             </View>
             <Text style={{padding: 20, color: '#000'}}>
               Hold and Move the pin to highlight the correct location of your

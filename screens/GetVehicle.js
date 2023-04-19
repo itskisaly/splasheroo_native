@@ -49,7 +49,6 @@ const GetVehicle = () => {
   const getData = async () => {
     setLoading(true);
     const value = await AsyncStorage.getItem('userId');
-    console.log(value, 'value0');
     const options = {
       method: 'POST',
       url: 'https://splasheroo-backend.herokuapp.com/api/vehicle/get',
@@ -134,7 +133,7 @@ const GetVehicle = () => {
           <View className="mt-5">
             <Text
               onPress={() => {
-                navigation.navigate('addHomeVehicle');
+                navigation.navigate('FindVehicle',{param:"homeVehicle"});
               }}
               style={{textAlign: 'center', color: '#055ED0'}}>
               + Add Vehicle

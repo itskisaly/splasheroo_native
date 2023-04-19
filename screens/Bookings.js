@@ -113,7 +113,7 @@ const Bookings = () => {
                 size={'large'}
               />
             ) : (
-              upcomingBookings?.length > 0 &&
+              upcomingBookings?.length > 0 ?
               upcomingBookings.map(
                 upcomingBooking =>
                   upcomingBooking.state !== 'completed' && (
@@ -123,7 +123,7 @@ const Bookings = () => {
                       image={Mercedes}
                     />
                   ),
-              )
+              ) : <Text className="text-center mt-5">No booking Available!</Text>
             )}
           </View>
         ) : (
@@ -135,7 +135,7 @@ const Bookings = () => {
                 size={'large'}
               />
             ) : (
-              upcomingBookings?.length > 0 &&
+              upcomingBookings?.length > 0 ?
               upcomingBookings.map(
                 upcomingBooking =>
                   upcomingBooking.state === 'completed' && (
@@ -145,7 +145,7 @@ const Bookings = () => {
                       image={Mercedes}
                     />
                   ),
-              )
+              ) : <Text className="text-center mt-5">No booking Available!</Text>
             )}
           </View>
         )}

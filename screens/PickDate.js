@@ -36,13 +36,14 @@ const PickDate = () => {
     );
     return () => backHandler.remove();
   }, []);
-  const minDate = moment.tz("Europe/London").format("YYYY-MM-DD") // Today
+  //const minDate = moment.tz("Europe/London").format("YYYY-MM-DD") // Today
   // const maxDate = new Date(
   //   minDate.getFullYear(),
   //   minDate.getMonth() + 3,
   //   minDate.getDate(),
   // ).toLocaleDateString();
   const [maxDay, setMaxDay] = useState('');
+  const [minDate, setMinDate] = useState()
   const { setBookingDetails, bookingDetails } = useContext(AuthContext);
   const [allTime, setAllTime] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,29 +55,21 @@ const PickDate = () => {
     const _data = await axios.get(
       `https://splasheroo-backend.herokuapp.com/api/slot/getSlotsAvailability/${isDate}`,
     );
-    //let temp = false;
-    // _data.data.slots.map(element => {
-    //   if (moment.tz(element.startTime, "Europe/London").hours() > moment.tz("Europe/London").hours()
-    //     && element.isEnabled === true && element.slotsLeft > 0) {
-
-    //     console.log('yyyyyy')
-    //     temp = true;
-    //   }
-    //   console.log('ininini')
-    // })
-    // let today = moment.tz("Europe/London");
-    // let diff = moment.tz(selectedDate, "Europe/London");
-    // if(diff.isAfter(today))
-    // temp = true
-    // console.log(temp,'tesmp--')
-    // temp ? setSlotsAvailable(true) : setSlotsAvailable(false);
     setAllTime(_data.data.slots);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    setSelectDate(moment.tz("Europe/London").format('YYYY-MM-DD'));
-    loadDate(moment.tz("Europe/London").format('YYYYMMDD'));
+    const getSlotDate = async () => {
+      const _data = await axios.get(
+        `https://splasheroo-backend.herokuapp.com/api/slot/getNextAvailableDate/${moment.tz("Europe/London").format('YYYY-MM-DD')}`,
+      );
+      console.log(_data.data,'_data00-0-0-')
+      setMinDate(_data.data.nextAvailableSlot);
+      setSelectDate(_data.data.nextAvailableSlot);
+      loadDate(_data.data.nextAvailableSlot);
+    }
+    getSlotDate();
   }, []);
 
   const onDateChange = date => {

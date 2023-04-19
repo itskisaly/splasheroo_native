@@ -6,7 +6,7 @@ import {Banner} from '../assets';
 import CheckBox from '../components/CheckBox';
 import axios from 'axios';
 
-const FindVehicle = ({route}) => {
+const RegisterFindVehicle = ({route}) => {
   const data = route?.params?.param;
   const navigation = useNavigation();
   const [registrationPlate, setRegistrationPlate] = useState();
@@ -23,10 +23,9 @@ const FindVehicle = ({route}) => {
     setIsLoading(true);
     if(licensed){
       const _data = {
-        route: data === "homeVehicle" ? "homeVehicle" : "regVehicle",
         uk:"non-uk"
       }
-      navigation.navigate('addCustomVehicle',{param: _data});
+      navigation.navigate('RegisterAddVehicle',{param: _data});
     } else {
     const options = {
       method: 'POST',
@@ -46,10 +45,9 @@ const FindVehicle = ({route}) => {
         const _data = {
           registrationPlate: registrationPlate,
           data: response.data,
-          route: data === "homeVehicle" ? "homeVehicle" : "regVehicle"
         };
         setIsLoading(false);
-        navigation.navigate('AddVehicle', {param: _data});
+        navigation.navigate('RegisterAddVehicle', {param: _data});
         console.log(response.data);
       })
       .catch(error => {
@@ -103,4 +101,4 @@ const FindVehicle = ({route}) => {
   );
 };
 
-export default FindVehicle;
+export default RegisterFindVehicle;

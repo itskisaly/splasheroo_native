@@ -95,6 +95,12 @@ const Summary = ({route}) => {
   //console.log(bookingDetails, 'bookingDetails')
 
   const handleCofirm = () => {
+    console.log({
+      userId: userId,
+      ref: refferenceId,
+      promocode: pCode,
+      ...bookingDetails,
+    },'dara----')
     setIsLoading(true);
     const options = {
       method: 'POST',
