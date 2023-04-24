@@ -48,6 +48,7 @@ import TempScreen from '../screens/TempScreen';
 import VerifyScreen from '../screens/VerifyScreen';
 import AddCustomVehicle from '../screens/AddCustomVehicle';
 import ConfirmLocationScreen from '../screens/ConfirmLocationScreen';
+import ManualConfirmLOcationScreen from '../screens/ManualConfirmLocationScreen';
 import ChooseVehicleScreen from '../screens/ChooseVehicle';
 import RegisterAddVehicle from "../screens/RegisterAddVehicle";
 import RegisterFindVehicle from '../screens/RegisterFindVehicle';
@@ -104,6 +105,13 @@ const FirstScreenStack = () => {
           headerTitle: 'Confirm Location',
         }}
         component={ConfirmLocationScreen}
+      />
+      <Stack.Screen
+        name="ManualConfirmLOcationScreen"
+        options={{
+          headerTitle: 'Confirm Location',
+        }}
+        component={ManualConfirmLOcationScreen}
       />
       <Stack.Screen
         name="stepForm"

@@ -44,6 +44,7 @@ const LoginScreen = () => {
 
   const getData = async () => {
     const value = await AsyncStorage.getItem('completeProfile');
+    console.log(value,'value00')
     if (value === "completed") {
       navigation.navigate('homeScreen');
     }

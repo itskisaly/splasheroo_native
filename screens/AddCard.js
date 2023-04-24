@@ -4,7 +4,8 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Image,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert
 } from "react-native";
 import React, { useLayoutEffect, useState, useContext, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -15,7 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 import { Ionicons } from "react-native-vector-icons";
 import axios from "axios";
-import {back} from "../assets";
+import { back } from "../assets";
 
 
 const AddCard = () => {
@@ -31,7 +32,7 @@ const AddCard = () => {
     const {
         renderCardInfo,
         setRenderCardInfo
-      } = useContext(AuthContext);
+    } = useContext(AuthContext);
 
     const [cardType, setCardType] = useState("...");
 
@@ -96,6 +97,8 @@ const AddCard = () => {
                 }
             })
             .catch((error) => {
+                setIsLoading(false);
+                Alert.alert('Card Detail Invalid!!');
                 console.error(error);
             });
         // navigation.navigate("SuccessBooking",{param:userId});
@@ -224,7 +227,7 @@ const AddCard = () => {
                     {isLoading ? <ActivityIndicator size="large" color="#0B646B" /> :
                         <Button
                             className="bg-[#00BCD4]"
-                            // disabled={selectedTime}
+                            disabled={!cardNumber || !expiryDate ||  !cvv}
                             mode="contained"
                             onPress={handleBooking}
                         >

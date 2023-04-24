@@ -102,6 +102,7 @@ const AccountDetails = () => {
         await AsyncStorage.removeItem("userToken");
         AsyncStorage.removeItem('userId');
         AsyncStorage.removeItem('userEmail');
+        AsyncStorage.removeItem('completeProfile');
         navigation.navigate("login");
     };
 

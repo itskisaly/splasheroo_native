@@ -131,7 +131,7 @@ function ChooseVehicleScreen() {
                     <Image source={Mercedes} />
                   </View>
                   <View style={{flex: 1, marginLeft: 10}}>
-                    <Text className="text-black">{item.RegistrationPlate}</Text>
+                    <Text className="text-black">{item.RegistrationPlate.toUpperCase()}</Text>
                     <Text className="text-black">
                       {item.make} {item.model} {item.coulor}
                     </Text>

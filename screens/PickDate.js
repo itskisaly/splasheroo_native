@@ -26,6 +26,7 @@ const PickDate = () => {
     startTime: '',
     endTime: '',
   });
+  const [calendarLoading,setCalendarLoading] = useState(false);
   const navigation = useNavigation();
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -60,14 +61,21 @@ const PickDate = () => {
   };
 
   useEffect(() => {
+    setCalendarLoading(true);
     const getSlotDate = async () => {
-      const _data = await axios.get(
-        `https://splasheroo-backend.herokuapp.com/api/slot/getNextAvailableDate/${moment.tz("Europe/London").format('YYYY-MM-DD')}`,
-      );
-      console.log(_data.data,'_data00-0-0-')
-      setMinDate(_data.data.nextAvailableSlot);
-      setSelectDate(_data.data.nextAvailableSlot);
-      loadDate(_data.data.nextAvailableSlot);
+      try {
+        const _data = await axios.get(
+          `https://splasheroo-backend.herokuapp.com/api/slot/getNextAvailableDate/${moment.tz("Europe/London").add(1,"d").format('YYYYMMDD')}`,
+          );
+        console.log(_data,'_data000')
+        setCalendarLoading(false);
+        setMinDate(_data.data.nextAvailableSlot);
+        setSelectDate(_data.data.nextAvailableSlot);
+        loadDate(_data.data.nextAvailableSlot);
+      } catch (error) {
+        setCalendarLoading(false);
+        console.log(error)
+      }
     }
     getSlotDate();
   }, []);
@@ -104,13 +112,6 @@ const PickDate = () => {
     return true;
   }
 
-  useEffect(() => {
-    console.log(selectedDate,'selectedDate00')
-  },[selectedDate])
-
-
-
-
   console.log(selectedDate, 'selectedDate')
   return (
     <SafeAreaView className="bg-white h-full">
@@ -122,7 +123,14 @@ const PickDate = () => {
         {/* <Text className="text-2xl ml-20 text-center">Pick a date and time</Text> */}
       </View>
       <View className="px-4 mt-5 bg-[#F6FBFF] rounded-2xl">
-        <CalendarPicker
+        {calendarLoading ?     
+        <ActivityIndicator
+          style={{ marginTop: 200 }}
+          color="#0B646B"
+          size={'large'}
+          />
+          :
+          <CalendarPicker
           minDate={minDate}
           initialDate={minDate}
           //todayBackgroundColor="#e6ffe6"
@@ -133,11 +141,13 @@ const PickDate = () => {
           selectedStartDate={minDate}
           onDateChange={onDateChange}
           width={360}
-        />
+          />}
       </View>
+      {!calendarLoading &&
       <Text className="text-center mt-3 text-black">
         {moment.tz(selectedDate, "Europe/London").format('DD-MM-YYYY')}
       </Text>
+      }
       {isLoading ? (
         <ActivityIndicator
           style={{ marginTop: 200 }}

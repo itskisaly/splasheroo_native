@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  Alert
 } from 'react-native';
 import React, {useLayoutEffect, useState, useContext, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -121,6 +122,8 @@ const CardDetail = ({route}) => {
         }
       })
       .catch(error => {
+        setIsLoading(false);
+        Alert.alert('Card Detail Invalid!!');
         console.error(error);
       });
     // navigation.navigate("SuccessBooking",{param:userId});
@@ -249,7 +252,7 @@ const CardDetail = ({route}) => {
           ) : (
             <Button
               className="bg-[#00BCD4]"
-              // disabled={selectedTime}
+              disabled={!cardNumber || !expiryDate ||  !cvv}
               mode="contained"
               onPress={handleBooking}>
               Proceed to Payment

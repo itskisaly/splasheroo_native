@@ -165,6 +165,7 @@ const HomeScreen = () => {
             color: '#000',
           },
         }}
+        
         onPress={(data, details = null) => {
           setUserAddress(data.description);
           setPin({
@@ -175,6 +176,11 @@ const HomeScreen = () => {
         query={{
           key: 'AIzaSyDHT7BzneZ4BDuC3D6TVmC4JOm7wZoZ_Ss',
           language: 'en',
+          types: ['geocode', 'establishment'],
+          location: '52.6369,-1.1398',
+          radius: '10000',
+          strictbounds: true,
+          input: 'Leicester',
         }}
       />
       <ScrollView style={{backgroundColor: '#FFFFFF'}}>

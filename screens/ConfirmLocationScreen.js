@@ -25,25 +25,14 @@ const ConfirmLocationScreen = ({ route }) => {
   const { setBookingDetails, bookingDetails } = useContext(AuthContext);
   const navigation = useNavigation();
 
-  const [postCode, setPostCode] = useState('');
   const [landMark, setLandMark] = useState('');
   const [notes, setNotes] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [manually, setMaually] = useState(false);
-
-  const hanldeConfirmLocation = () => {
-    setBookingDetails({
-      ...bookingDetails,
-      postCode: addPostCode,
-      location: landMark,
-      notes,
-    });
-    navigation.navigate('ChooseVehicleScreen');
-  };
-
   const [getAddress, setGetAddress] = useState([]);
   const [addPostCode, setAddPostCode] = useState('');
   const [addressLoading, setAddressLoading] = useState(false);
+
 
   const handleSearch = async () => {
     setAddressLoading(true);
@@ -71,6 +60,17 @@ const ConfirmLocationScreen = ({ route }) => {
     navigation.navigate('homeScreen');
   };
 
+  const hanldeConfirmLocation = () => {
+    setBookingDetails({
+      ...bookingDetails,
+      postCode: addPostCode,
+      location: landMark,
+      notes,
+    });
+    navigation.navigate('ChooseVehicleScreen');
+  };
+
+
 
   return (
     <>
@@ -79,10 +79,10 @@ const ConfirmLocationScreen = ({ route }) => {
         <SafeAreaView className="h-full w-full bg-white">
             <View className="px-4">
               <Text style={styles.text}>
-                Please let us know your exact address so we can collect the key!
+              Please confirm post code and hit the search bar to find address!
               </Text>
               <View className="self-center">
-                <View className="px-4 mt-5">
+                <View className="px-4 mt-1">
                   <Text className="mt-5 text-[17px] text-black">
                     Enter Post Code
                   </Text>
@@ -129,12 +129,18 @@ const ConfirmLocationScreen = ({ route }) => {
                   </View>
                 </View>
               </View>
-              <View>
-                <CheckBox
+              <View className="mt-5 px-4">
+                {/* <CheckBox
                   onPress={() => setMaually(!manually)}
                   title="Enter Address Manually"
                   isChecked={manually}
-                />
+                /> */}
+                  <Button
+                  className="bg-[#00BCD4]"
+                  mode="contained"
+                  onPress={() => navigation.navigate('ManualConfirmLOcationScreen')}>
+                  Enter Address Manually
+                </Button>
               </View>
                 {manually &&
               <View className="px-4">
