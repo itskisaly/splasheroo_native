@@ -5,7 +5,9 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
-  Alert
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import React, {useLayoutEffect, useState, useContext, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -17,7 +19,6 @@ import moment from 'moment';
 import {Ionicons} from 'react-native-vector-icons';
 import axios from 'axios';
 //   import { CardField } from "@stripe/stripe-react-native";
-
 //   import { masterCard } from "../assets/mastercard.png";
 //   import { disabledCard } from "../assets/disabledCard.png";
 //   import { visa } from "../assets/visa.png";
@@ -149,6 +150,7 @@ const CardDetail = ({route}) => {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <SafeAreaView className="bg-white">
       <View className="px-4 bg-white h-full relative">
         <View className="flex-row items-center px-4 mt-0">
@@ -261,6 +263,7 @@ const CardDetail = ({route}) => {
         </View>
       </View>
     </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

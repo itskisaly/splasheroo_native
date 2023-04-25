@@ -5,7 +5,9 @@ import {
     TouchableOpacity,
     Image,
     ActivityIndicator,
-    Alert
+    Alert,
+    TouchableWithoutFeedback,
+    Keyboard
 } from "react-native";
 import React, { useLayoutEffect, useState, useContext, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -125,6 +127,7 @@ const AddCard = () => {
     }
 
     return (
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <SafeAreaView className="bg-white">
             <View className="px-4 bg-white h-full relative">
                 <View className="flex-row items-center px-4 mt-0">
@@ -237,6 +240,7 @@ const AddCard = () => {
                 </View>
             </View>
         </SafeAreaView>
+        </TouchableWithoutFeedback>
     );
 };
 

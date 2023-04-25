@@ -10,7 +10,10 @@ import {
   View,
   ActivityIndicator,
   BackHandler,
-  Image
+  Image,
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button,TextInput} from 'react-native-paper';
@@ -114,13 +117,18 @@ const HomeScreen = () => {
   }, [renderBookingInfo]);
 
   const handleCofirmLocation = () => {
-    setBookingDetails({
-      ...bookingDetails,
-      latitude: pin.latitude,
-      longitude: pin.longitude,
-      address: userAddress,
-    });
-    navigation.navigate('ConfirmLocationScreen',{param: postCodes});
+    console.log(userAddress,'userAddress')
+    if(userAddress.includes("Leicester") || userAddress.includes("LE")){
+      setBookingDetails({
+        ...bookingDetails,
+        latitude: pin.latitude,
+        longitude: pin.longitude,
+        address: userAddress,
+      });
+      navigation.navigate('ConfirmLocationScreen',{param: postCodes});
+    } else {
+      Alert.alert('Oops, we are currently not available in your location');
+    }
   };
 
   const loadPostCode = async () => {
@@ -141,7 +149,8 @@ const HomeScreen = () => {
 
 
   return (
-    <>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <>
       <GooglePlacesAutocomplete
         placeholder="Enter Location"
         fetchDetails={true}
@@ -167,6 +176,7 @@ const HomeScreen = () => {
         }}
         
         onPress={(data, details = null) => {
+          console.log(data.description,'details')
           setUserAddress(data.description);
           setPin({
             latitude: details?.geometry?.location.lat,
@@ -299,7 +309,8 @@ const HomeScreen = () => {
           </View>
         </View>
       </ScrollView>
-    </>
+      </>
+    </TouchableWithoutFeedback>
   );
 };
 
