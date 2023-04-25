@@ -32,8 +32,8 @@ const HomeScreen = () => {
     useContext(AuthContext);
 
   const [pin, setPin] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
+    latitude: 52.6166,
+    longitude: -1.0956,
   });
 
   const [upcomingBooking, setUpComingBooking] = useState();

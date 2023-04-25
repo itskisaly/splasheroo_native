@@ -96,8 +96,8 @@ const PickDate = () => {
   const handleNext = () => {
     setBookingDetails({
       ...bookingDetails,
-      startTime: moment.utc(selectedTime.startTime).hour() + ':' + '00',
-      endTime: moment.utc(selectedTime.endTime).hour() + ':' + '00',
+      startTime: moment.tz(selectedTime.startTime,"Europe/London").hour() + ':' + '00',
+      endTime: moment.tz(selectedTime.endTime,"Europe/London").hour() + ':' + '00',
       date: selectedDate,
     });
     navigation.navigate('SelectService');

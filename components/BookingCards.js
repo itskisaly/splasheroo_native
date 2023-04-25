@@ -1,8 +1,11 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 const BookingCards = ({image, upcomingBooking}) => {
+
+  console.log(upcomingBooking.startTime,'upcomingBooking')
+
   return (
     <View
       style={{
@@ -38,7 +41,7 @@ const BookingCards = ({image, upcomingBooking}) => {
           marginTop: 10,
         }}>
         <Text className="text-black">
-          {moment(upcomingBooking.date).format('MM-DD-YYYY')}
+          {moment.tz(upcomingBooking.date,"Europe/London").format('DD-MM-YYYY')}
         </Text>
         <Text style={{color: '#000'}}>
           {upcomingBooking?.startTime} - {upcomingBooking?.endTime}
@@ -53,7 +56,7 @@ const BookingCards = ({image, upcomingBooking}) => {
             {upcomingBooking?.car?.model}
           </Text>
           <Text className="text-black">
-            {upcomingBooking?.car?.RegistrationPlate}
+            {upcomingBooking?.car?.RegistrationPlate.toUpperCase()}
           </Text>
         </View>
         <View style={{flex: 1}}>
