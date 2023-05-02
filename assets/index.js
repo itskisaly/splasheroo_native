@@ -13,3 +13,4 @@ export {default as checkbox} from "./checkboxes.png";
 export {default as checked} from "./checked.png";
 export {default as card} from "./cards.png";
 export {default as reset} from "./reset.png";
+export {default as Delete} from "./delete.png";

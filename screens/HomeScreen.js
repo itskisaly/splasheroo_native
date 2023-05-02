@@ -147,7 +147,6 @@ const HomeScreen = () => {
     textRef.current.clear();
   }
 
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <>
@@ -282,6 +281,7 @@ const HomeScreen = () => {
                 marginHorizontal: 10,
                 marginTop: 10,
               }}
+              // disabled={textRef.current.getAddressText() === ""}
               onPress={handleCofirmLocation}
               className="bg-[#00BCD4]"
               mode="contained">

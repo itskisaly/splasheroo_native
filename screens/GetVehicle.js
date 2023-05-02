@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
-import {Mercedes, Edit, Toyota, Tesla} from '../assets';
+import {Mercedes, Edit, Toyota, Tesla,Delete} from '../assets';
 import {AuthContext} from '../context/AuthContext';
 import axios from 'axios';
 import {back} from '../assets';
@@ -91,6 +91,34 @@ const GetVehicle = () => {
     navigation.navigate('addHomeVehicle', {param: item});
   };
 
+  const handleDelete = async (item) => {
+    setLoading(true);
+    const value = await AsyncStorage.getItem('userId');
+    const options = {
+      method: 'POST',
+      url: 'https://splasheroo-backend.herokuapp.com/api/vehicle/remove',
+      params: {},
+      headers: {
+        'content-type': 'application/json',
+      },
+      data: {
+        "id": value,
+        "RegistrationPlate": item.RegistrationPlate
+      },
+    };
+
+    axios
+      .request(options)
+      .then(response => {
+        getData();
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setLoading(false);
+      });
+  }
+
   const handleSelected = item => {
     setVehicleId(item._id);
   };
@@ -124,8 +152,11 @@ const GetVehicle = () => {
                       {item.make} {item.model} {item.coulor}
                     </Text>
                   </View>
-                  <TouchableOpacity onPress={() => handleEdit(item)}>
+                  <TouchableOpacity className="mr-3" onPress={() => handleEdit(item)}>
                     <Image source={Edit} />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleDelete(item)}>
+                    <Image source={Delete} />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
