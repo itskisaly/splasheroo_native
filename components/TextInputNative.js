@@ -7,7 +7,7 @@ const TextInputNative = ({setNotes}) => {
       <TextInput
         style={{
           width: '100%',
-          height: 300,
+          height: 170,
           fontSize: 15,
           paddingTop: 30,
           padding: 10,

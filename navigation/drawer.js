@@ -456,7 +456,7 @@ function Mydrawer() {
                 }}
               />
               <DrawerItem
-                label="Choose Vehicle"
+                label="Vehicles"
                 labelStyle={{
                   color: '#000',
                 }}

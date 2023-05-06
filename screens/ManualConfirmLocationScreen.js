@@ -13,6 +13,7 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
   ActivityIndicator
 } from 'react-native';
 //import { Ionicons } from 'react-native-vector-icons';
@@ -35,10 +36,16 @@ const ManualConfirmLOcationScreen = () => {
   const [addressLine2, setAddressLine2] = useState("");
   const [town, setTown] = useState("");
   const [country,setCountry]=useState("");
+  const arr = ["le1", "le2", "le3", "le4", "le5", "le6", "le7", "le8", "le9", "le16", "le18", "le19", "le22"];
+
 
 
 
   const hanldeConfirmLocation = () => {
+    let str = addPostCode.replace(/\s/g, '').toLocaleLowerCase().slice(-3);
+    let check = addPostCode.replace(/\s/g, '').toLocaleLowerCase().replace(str, '');
+   
+    if(arr.includes(check)){
     const _landMark = addressLine1 + " " + addressLine2 + " " + town + " " + country
     setBookingDetails({
       ...bookingDetails,
@@ -47,6 +54,9 @@ const ManualConfirmLOcationScreen = () => {
       notes,
     });
     navigation.navigate('ChooseVehicleScreen');
+    } else {
+      Alert.alert('Try for different postcodes')
+    }
   };
 
 

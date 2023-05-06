@@ -13,7 +13,8 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 //import { Ionicons } from 'react-native-vector-icons';
 import { AuthContext } from '../context/AuthContext';
@@ -32,18 +33,32 @@ const ConfirmLocationScreen = ({ route }) => {
   const [getAddress, setGetAddress] = useState([]);
   const [addPostCode, setAddPostCode] = useState('');
   const [addressLoading, setAddressLoading] = useState(false);
+  const arr = ["le1", "le2", "le3", "le4", "le5", "le6", "le7", "le8", "le9", "le16", "le18", "le19", "le22"];
 
 
   const handleSearch = async () => {
-    setAddressLoading(true);
-    const data = await axios.get(
-      `https://api.getAddress.io/find/${addPostCode}?api-key=lmNcjSdtG0W1tLhJc-s81g37988`,
-    );
-    let filteredArr = data.data.addresses.map(function (str) {
-      return str.replace(/,/g, '');
-    });
-    setGetAddress(filteredArr);
-    setAddressLoading(false);
+    let str = addPostCode.replace(/\s/g, '').toLocaleLowerCase().slice(-3);
+    let check = addPostCode.replace(/\s/g, '').toLocaleLowerCase().replace(str, '');
+
+    if(arr.includes(check)) {
+      try {
+        setAddressLoading(true);
+        const data = await axios.get(
+          `https://api.getAddress.io/find/${addPostCode}?api-key=lmNcjSdtG0W1tLhJc-s81g37988`,
+        );
+        let filteredArr = data.data.addresses.map(function (str) {
+          return str.replace(/,/g, '');
+        });
+        setGetAddress(filteredArr);
+        setAddressLoading(false);
+      } catch (error) {
+        setAddressLoading(false);
+        Alert.alert('Go for different postcode!!');
+      }
+    } else {
+      setAddressLoading(false);
+      Alert.alert('Go for different postcode!!');
+    }
   };
 
   const handleSelect = addr => {
@@ -75,11 +90,11 @@ const ConfirmLocationScreen = ({ route }) => {
   return (
     <>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <ScrollView>
-        <SafeAreaView className="h-full w-full bg-white">
+        <ScrollView className="h-full w-full bg-white">
+          <SafeAreaView className="h-full w-full bg-white ">
             <View className="px-4">
               <Text style={styles.text}>
-              Please confirm post code and hit the search bar to find address!
+                Please confirm post code and hit the search bar to find address!
               </Text>
               <View className="self-center">
                 <View className="px-4 mt-1">
@@ -135,15 +150,15 @@ const ConfirmLocationScreen = ({ route }) => {
                   title="Enter Address Manually"
                   isChecked={manually}
                 /> */}
-                  <Button
+                <Button
                   className="bg-[#00BCD4]"
                   mode="contained"
                   onPress={() => navigation.navigate('ManualConfirmLOcationScreen')}>
                   Enter Address Manually
                 </Button>
               </View>
-                {manually &&
-              <View className="px-4">
+              {manually &&
+                <View className="px-4">
                   <TextInput
                     mode="outlined"
                     label="address"
@@ -153,8 +168,8 @@ const ConfirmLocationScreen = ({ route }) => {
                     placeholder="Enter Post Code"
                     onChangeText={text => setLandMark(text)}
                   />
-              </View>
-                }
+                </View>
+              }
               <View>
                 <Text style={styles.subhead}>Notes</Text>
                 <TextInputNative setNotes={setNotes} />
@@ -162,7 +177,7 @@ const ConfirmLocationScreen = ({ route }) => {
               <View>
                 <Button
                   className={
-                    !addPostCode || !landMark ? 'bg-[#E2EDF6]' : 'bg-[#00BCD4]'
+                    !addPostCode || !landMark ? 'bg-[#E2EDF6] mt-20' : 'bg-[#00BCD4] mt-20'
                   }
                   mode="contained"
                   onPress={hanldeConfirmLocation}
@@ -171,8 +186,8 @@ const ConfirmLocationScreen = ({ route }) => {
                 </Button>
               </View>
             </View>
-        </SafeAreaView>
-          </ScrollView>
+          </SafeAreaView>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </>
   );

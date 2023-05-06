@@ -71,6 +71,8 @@ const Summary = ({route}) => {
       .then(response => {
         if (response.data.success) {
           setCardDetailAvailable(true);
+          let ref = rnd(7);
+          setRefferenceId(ref);
         } else {
           setCardDetailAvailable(false);
         }
@@ -85,22 +87,15 @@ const Summary = ({route}) => {
     [...Array(len)]
       .map(() => chars.charAt(Math.floor(Math.random() * chars.length)))
       .join('');
+      
 
   useEffect(() => {
     getData();
-    let ref = rnd(7);
-    setRefferenceId(ref);
   }, []);
 
   //console.log(bookingDetails, 'bookingDetails')
 
-  const handleCofirm = () => {
-    console.log({
-      userId: userId,
-      ref: refferenceId,
-      promocode: pCode,
-      ...bookingDetails,
-    },'dara----')
+  const handleCofirm = async () => {
     setIsLoading(true);
     const options = {
       method: 'POST',
@@ -116,7 +111,7 @@ const Summary = ({route}) => {
         ...bookingDetails,
       },
     };
-    axios
+   await axios
       .request(options)
       .then(response => {
         console.log(response);
