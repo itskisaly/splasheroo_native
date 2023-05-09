@@ -53,11 +53,11 @@ const ConfirmLocationScreen = ({ route }) => {
         setAddressLoading(false);
       } catch (error) {
         setAddressLoading(false);
-        Alert.alert('Go for different postcode!!');
+        Alert.alert('we are not currently covering this but you can register your interest at info@splaseroo.co.uk');
       }
     } else {
       setAddressLoading(false);
-      Alert.alert('Go for different postcode!!');
+      Alert.alert('we are not currently covering this but you can register your interest at info@splaseroo.co.uk');
     }
   };
 

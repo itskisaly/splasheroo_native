@@ -35,7 +35,6 @@ const ManualConfirmLOcationScreen = () => {
   const [addressLine1, setAddressLine1] = useState("");
   const [addressLine2, setAddressLine2] = useState("");
   const [town, setTown] = useState("");
-  const [country,setCountry]=useState("");
   const arr = ["le1", "le2", "le3", "le4", "le5", "le6", "le7", "le8", "le9", "le16", "le18", "le19", "le22"];
 
 
@@ -46,7 +45,7 @@ const ManualConfirmLOcationScreen = () => {
     let check = addPostCode.replace(/\s/g, '').toLocaleLowerCase().replace(str, '');
    
     if(arr.includes(check)){
-    const _landMark = addressLine1 + " " + addressLine2 + " " + town + " " + country
+    const _landMark = addressLine1 + " " + addressLine2 + " " + town
     setBookingDetails({
       ...bookingDetails,
       postCode: addPostCode,
@@ -55,7 +54,7 @@ const ManualConfirmLOcationScreen = () => {
     });
     navigation.navigate('ChooseVehicleScreen');
     } else {
-      Alert.alert('Try for different postcodes')
+      Alert.alert('we are not currently covering this but you can register your interest at info@splaseroo.co.uk')
     }
   };
 
@@ -64,7 +63,7 @@ const ManualConfirmLOcationScreen = () => {
   return (
     <>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <ScrollView>
+        <ScrollView className="h-full w-full bg-white">
           <SafeAreaView className="h-full w-full bg-white">
             <View className="px-4 mt-4">
               <Text style={styles.text}>
@@ -108,15 +107,6 @@ const ManualConfirmLOcationScreen = () => {
                   placeholder="Enter Town Or City"
                   onChangeText={text => setTown(text)}
                 />
-                <TextInput
-                  mode="outlined"
-                  label="Country"
-                  textColor="#000"
-                  className="bg-slate-100 mt-4"
-                  value={country}
-                  placeholder="Enter Country"
-                  onChangeText={text => setCountry(text)}
-                />
               </View>
               <View>
                 <Text style={styles.subhead}>Notes</Text>
@@ -125,11 +115,11 @@ const ManualConfirmLOcationScreen = () => {
               <View>
                 <Button
                   className={
-                    !addPostCode || !addressLine1 || !country ? 'bg-[#E2EDF6]' : 'bg-[#00BCD4]'
+                    !addPostCode || !addressLine1 ? 'bg-[#E2EDF6]' : 'bg-[#00BCD4]'
                   }
                   mode="contained"
                   onPress={hanldeConfirmLocation}
-                  disabled={!addPostCode || !addressLine1 || !country}
+                  disabled={!addPostCode || !addressLine1}
                   >
                   Confirm Location
                 </Button>
