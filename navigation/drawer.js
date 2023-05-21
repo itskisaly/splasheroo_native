@@ -255,7 +255,7 @@ const FirstScreenStack = () => {
                   style={{
                     flexDirection: 'row',
                     backgroundColor: 'white',
-                    marginTop:40 //for ios
+                    //marginTop:40 //for ios
                   }}>
                   <TouchableOpacity
                     onPress={() => {
